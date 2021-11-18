@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :product do
     name { "MyString" }
-    type { nil }
+    type { 1 }
     price { 1.5 }
     quantity { "MyString" }
     description { "MyString" }
