@@ -1,5 +1,5 @@
 class UserController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: :logout
+  acts_as_token_authentication_handler_for User, only: [:logout, :create, :delete, :update]
   def login
     user = User.find_by!(email: params[:email])
     if user.valid_password?(params[:password])
@@ -16,5 +16,40 @@ class UserController < ApplicationController
     render json: {message: "You have successfully logout."}, status: :ok
   rescue StandardError => e
     render json: {message: e.message}, status: :bad_request
+  end
+
+  def create
+    user_params = User.new(types_params)
+    user_params.save!
+    render json: user_params, status: :created
+  rescue StandardError => e
+    render json: {message: e.message}, status: :unprocessable_entity
+  end
+
+  def update
+    user = User.find(params[:id])
+    User.update!(types_params)
+    render json: user, status: :accepted
+  rescue StandardError => e
+    render json: {message: e.message}, status: :unprocessable_entity
+  end
+
+  def delete
+    user = User.find(params[:id])
+    user.destroy!
+    render json: user, status: :accepted
+  rescue StandardError => e
+    render json: {message: e.message}, status: :unprocessable_entity
+  end
+
+
+  private
+
+  def user_params
+    params.require(:user).permit(
+      :name,
+      :email,
+      :password,
+    )
   end
 end
