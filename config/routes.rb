@@ -2,6 +2,19 @@ Rails.application.routes.draw do
   devise_for :admins, skip: :all
   devise_for :users, skip: :all
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  scope 'user' do
+    get 'login', to: 'user#login'
+    get 'logout', to: 'user#logout'
+    post 'create', to: 'user#create'
+    patch 'update/:id', to: 'user#update'
+    delete 'delete/:id', to: 'user#delete'
+  end
+  scope 'admin' do
+    get 'admin/login', to: 'admin#login'
+    get 'logout', to: 'admin#logout'
+  end
+
+
   namespace 'api' do
     namespace 'v1' do
       scope 'types' do
