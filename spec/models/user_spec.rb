@@ -11,5 +11,10 @@ RSpec.describe User, type: :model do
     context 'when user does not have an email' do
       it { expect(build(:user, email: nil)).not_to be_valid }
     end
+
+    context 'when user does not have a name' do
+      it { expect(build(:user, name: nil)).not_to be_valid }
+    end
+
   end
 end

@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :product do
-    name { "MyString" }
-    type { 1 }
+    name { "product" }
+    type { association :type }
     price { 1.5 }
-    quantity { "MyString" }
-    description { "MyString" }
+    quantity { 15 }
+    description { "description" }
   end
 end
