@@ -1,5 +1,5 @@
 class UserController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:logout, :create, :delete, :update]
+  acts_as_token_authentication_handler_for User, only: [:logout, :delete, :update]
   def login
     user = User.find_by!(email: params[:email])
     if user.valid_password?(params[:password])
@@ -19,16 +19,16 @@ class UserController < ApplicationController
   end
 
   def create
-    user_params = User.new(types_params)
-    user_params.save!
-    render json: user_params, status: :created
+    user = User.new(user_params)
+    user.save!
+    render json: user, status: :created
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def update
     user = User.find(params[:id])
-    User.update!(types_params)
+    User.update!(user_params)
     render json: user, status: :accepted
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
@@ -50,6 +50,7 @@ class UserController < ApplicationController
       :name,
       :email,
       :password,
+      :password_confirmation
     )
   end
 end

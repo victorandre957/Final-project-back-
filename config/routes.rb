@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     delete 'delete/:id', to: 'user#delete'
   end
   scope 'admin' do
-    get 'admin/login', to: 'admin#login'
+    get 'login', to: 'admin#login'
     get 'logout', to: 'admin#logout'
   end
 
