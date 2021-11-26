@@ -1,14 +1,18 @@
 class UserController < ApplicationController
-  acts_as_token_authentication_handler_for User, only: [:logout, :create, :delete, :update]
+  acts_as_token_authentication_handler_for User, only: [:logout, :show, :delete, :update]
   def login
     user = User.find_by!(email: params[:email])
     if user.valid_password?(params[:password])
-      render json: user
+      render json: user, status: :ok
     else
       head(:unauthorized)
     end
   rescue StandardError => e
     render json: {message: e.message}, status: :not_found
+  end
+
+  def show
+    render json: current_user, status: :ok
   end
 
   def logout

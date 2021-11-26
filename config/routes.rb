@@ -4,15 +4,19 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   scope 'user' do
     get 'login', to: 'user#login'
+    get 'show', to: 'user#show'
     get 'logout', to: 'user#logout'
     post 'create', to: 'user#create'
     patch 'update/:id', to: 'user#update'
     delete 'delete/:id', to: 'user#delete'
   end
   scope 'admin' do
-    get 'admin/login', to: 'admin#login'
+    get 'login', to: 'admin#login'
     get 'logout', to: 'admin#logout'
   end
+  get 'authentication_failure', to: 'application#authentication_failure', as: :authentication_failure
+  patch 'authentication_failure', to: 'application#authentication_failure'
+  delete 'authentication_failure', to: 'application#authentication_failure'
 
 
   namespace 'api' do
