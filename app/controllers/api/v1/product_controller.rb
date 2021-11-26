@@ -46,7 +46,8 @@ class Api::V1::ProductController < ApplicationController
       :type_id,
       :price,
       :quantity,
-      :description
+      :description,
+      :photo
     )
   end
 end
