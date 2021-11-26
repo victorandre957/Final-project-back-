@@ -1,5 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Type, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'factory' do
+    context 'when using standard factory' do
+      it { expect(build(:type)).to be_valid }
+    end
+  end
+
+  describe 'validations' do
+    context 'when type does not have a name' do
+      it { expect(build(:type, name: nil)).not_to be_valid }
+    end
+  end
 end

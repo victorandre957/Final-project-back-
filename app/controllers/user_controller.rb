@@ -23,27 +23,35 @@ class UserController < ApplicationController
   end
 
   def create
-    user_params = User.new(types_params)
-    user_params.save!
-    render json: user_params, status: :created
+    user = User.new(user_params)
+    user.save!
+    render json: user, status: :created
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def update
     user = User.find(params[:id])
-    User.update!(types_params)
-    render json: user, status: :accepted
+    if current_user.id === user.id then
+      User.update!(user_params)
+      render json: user, status: :ok
+    else
+      render json: {message: "Você não pode atualizar a conta de outro usuário"}, status: :unauthorized
+    end
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def delete
     user = User.find(params[:id])
-    user.destroy!
-    render json: user, status: :accepted
+    if current_user.id === user.id then
+      user.destroy!
+      render json: user, status: :ok
+    else
+      render json: {message: "Você não pode deletar a conta de outro usuário"}, status: :unauthorized
+    end
   rescue StandardError => e
-    render json: {message: e.message}, status: :unprocessable_entity
+    render json: {message: e.message}, status: :not_found
   end
 
 

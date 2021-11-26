@@ -7,27 +7,41 @@ class Api::V1::FavouriteController < ApplicationController
   end
 
   def create
-    favourite_params = Favourite.new(favourites_params)
-    favourite_params.save!
-    render json: favourite_params, status: :created
+    favourite = Favourite.new(favourites_params)
+    if current_user.id === favourite.user_id then
+      favourite.save!
+      render json: favourite, status: :created
+    elsif favourite.user_id === nil then
+      render json: {message: "unprocessable_entity" }, status: :unprocessable_entity
+    else
+      render json: { message: "Você não pode criar um favorito para outro usuário" }, status: :unauthorized
+    end
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def update
     favourite = Favourite.find(params[:id])
-    language.update!(favourites_params)
-    render json: favourite, status: :accepted
+    if current_user.id === favourite.user_id then
+      favourite.update!(favourites_params)
+      render json: favourite, status: :ok
+    else
+      render json: { message: "Você não pode atualizar o favorito de outro usuário" }, status: :unauthorized
+    end
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def delete
     favourite = Favourite.find(params[:id])
-    favourite.destroy!
-    render json: favourite, status: :accepted
+    if current_user.id === favourite.user_id then 
+      favourite.destroy!
+      render json: favourite, status: :ok
+    else
+      render json: { message: "Você não pode deletar o favorito de outro usuário" }, status: :unauthorized
+    end
   rescue StandardError => e
-    render json: {message: e.message}, status: :unprocessable_entity
+    render json: {message: e.message}, status: :not_found
   end
 
   private
