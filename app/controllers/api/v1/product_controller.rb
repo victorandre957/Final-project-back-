@@ -14,17 +14,17 @@ class Api::V1::ProductController < ApplicationController
   end
 
   def create
-    product_params = Product.new(types_params)
-    product_params.save!
-    render json: product_params, status: :created
+    product = Product.new(product_params)
+    product.save!
+    render json: product, status: :created
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
 
   def update
     product = Product.find(params[:id])
-    product.update!(types_params)
-    render json: product, status: :accepted
+    product.update!(product_params)
+    render json: product, status: :ok
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
@@ -32,9 +32,9 @@ class Api::V1::ProductController < ApplicationController
   def delete
     product = Product.find(params[:id])
     product.destroy!
-    render json: product, status: :accepted
+    render json: product, status: :ok
   rescue StandardError => e
-    render json: {message: e.message}, status: :unprocessable_entity
+    render json: {message: e.message}, status: :not_found
   end
 
 

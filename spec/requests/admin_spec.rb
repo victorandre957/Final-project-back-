@@ -25,10 +25,6 @@ RSpec.describe "Admins", type: :request do
       it 'returns a valid authentication token' do
         expect(JSON.parse(response.body)["authentication_token"]).not_to be_nil
       end
-
-      # it 'is logged in' do
-      #   expect(current_admin).to be_valid
-      # end
     end
 
     context 'with incorrect email' do
@@ -56,5 +52,35 @@ RSpec.describe "Admins", type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+  end
+
+  describe "/GET #logout" do
+    let(:admin) do
+      create(:admin)
+    end
+
+    context 'logged in as admin' do
+      before do
+        get '/admin/logout', headers: {
+          'X-Admin-Token': admin.authentication_token,
+          'X-Admin-Email': admin.email
+        }
+      end
+
+      it 'returns a success response' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'not logged in as admin' do
+      before do
+        get '/admin/logout'
+      end
+      
+      # it 'returns a bad request response' do
+      #   expect(response).to have_http_status(:bad_request)
+      # end
+    end
+
   end
 end

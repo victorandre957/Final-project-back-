@@ -23,8 +23,8 @@ class Api::V1::TypeController < ApplicationController
 
   def update
     type = Type.find(params[:id])
-    language.update!(types_params)
-    render json: language, status: :accepted
+    type.update!(types_params)
+    render json: type, status: :ok
   rescue StandardError => e
     render json: {message: e.message}, status: :unprocessable_entity
   end
@@ -32,16 +32,16 @@ class Api::V1::TypeController < ApplicationController
   def delete
     type = Type.find(params[:id])
     type.destroy!
-    render json: language, status: :accepted
+    render json: type, status: :ok
   rescue StandardError => e
-    render json: {message: e.message}, status: :unprocessable_entity
+    render json: {message: e.message}, status: :not_found
   end
 
   private
 
   def types_params
     params.require(:type).permit(
-    :name
+      :name
     )
   end
 end
