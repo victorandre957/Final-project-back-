@@ -54,6 +54,7 @@ class UserController < ApplicationController
       :name,
       :email,
       :password,
+      :profile_picture
     )
   end
 end
