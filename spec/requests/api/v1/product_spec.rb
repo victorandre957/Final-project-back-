@@ -37,7 +37,6 @@ RSpec.describe "Api::V1::Products", type: :request do
       it 'returns with the correct product' do
         expect(JSON.parse(response.body)["id"]).to eq(product.id)
         expect(JSON.parse(response.body)["name"]).to eq(product.name)
-        expect(JSON.parse(response.body)["type_id"]).to eq(product.type_id)
         expect(JSON.parse(response.body)["price"]).to eq(product.price)
         expect(JSON.parse(response.body)["quantity"]).to eq(product.quantity)
         expect(JSON.parse(response.body)["description"]).to eq(product.description)
