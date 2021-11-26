@@ -3,7 +3,7 @@ class AdminController < ApplicationController
   def login
     admin = Admin.find_by!(email: params[:email])
     if admin.valid_password?(params[:password])
-      render json: admin
+      render json: admin, status: :ok
     else
       head(:unauthorized)
     end
