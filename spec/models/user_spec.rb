@@ -12,6 +12,14 @@ RSpec.describe User, type: :model do
       it { expect(build(:user, email: nil)).not_to be_valid }
     end
 
+    context 'when 2 users have the same email' do
+      before do
+        create(:user)
+      end
+      
+      it { expect(build(:user)).not_to be_valid }
+    end
+
     context 'when user does not have a name' do
       it { expect(build(:user, name: nil)).not_to be_valid }
     end

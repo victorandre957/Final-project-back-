@@ -33,7 +33,7 @@ class UserController < ApplicationController
   def update
     user = User.find(params[:id])
     if current_user.id === user.id then
-      User.update!(user_params)
+      user.update!(user_params)
       render json: user, status: :ok
     else
       render json: {message: "Você não pode atualizar a conta de outro usuário"}, status: :unauthorized

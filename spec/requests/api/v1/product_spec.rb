@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::Products", type: :request do
   describe "/GET #index" do
+    let(:type) { create(:type) }
     before do
-      create(:product)
-      create(:product)
+      create(:product, type: type)
+      create(:product, type: type, name: "test2")
       get '/api/v1/products/'
     end
 
@@ -108,7 +109,16 @@ RSpec.describe "Api::V1::Products", type: :request do
         new_product = Product.find_by(name: "test_create")
         expect(new_product).to be_nil
       end
+    end
 
+    context 'not logged in as admin' do
+      before do
+        post "/api/v1/products/create", params: params
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
 
   end
@@ -172,7 +182,16 @@ RSpec.describe "Api::V1::Products", type: :request do
         expect(updated_product.quantity).not_to be("500g")
         expect(updated_product.description).not_to be("updated_description")
       end
+    end
 
+    context 'not logged in as admin' do
+      before do
+        patch "/api/v1/products/update/#{product.id}", params: params
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 
@@ -205,6 +224,16 @@ RSpec.describe "Api::V1::Products", type: :request do
       end
 
       it { expect(response).to have_http_status(:not_found)}
+    end
+
+    context 'not logged in as admin' do
+      before do
+        delete "/api/v1/products/delete/#{product.id}"
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 end

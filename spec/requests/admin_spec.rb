@@ -77,9 +77,9 @@ RSpec.describe "Admins", type: :request do
         get '/admin/logout'
       end
       
-      # it 'returns a bad request response' do
-      #   expect(response).to have_http_status(:bad_request)
-      # end
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
 
   end

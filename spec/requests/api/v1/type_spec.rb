@@ -4,7 +4,7 @@ RSpec.describe "Api::V1::Types", type: :request do
   describe "/GET #index" do
     before do
       create(:type)
-      create(:type)
+      create(:type, name: "test2")
       get '/api/v1/types/'
     end
 
@@ -91,6 +91,15 @@ RSpec.describe "Api::V1::Types", type: :request do
 
     end
 
+    context 'not logged in as admin' do
+      before do
+        post "/api/v1/types/create", params: { type: params }
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
+    end
   end
 
   describe "/UPDATE #update" do
@@ -140,7 +149,16 @@ RSpec.describe "Api::V1::Types", type: :request do
         updated_type = Type.find_by(id: type.id)
         expect(updated_type.name).not_to be_nil
       end
+    end
 
+    context 'not logged in as admin' do
+      before do
+        patch "/api/v1/types/update/#{type.id}", params: { type: params }
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 
@@ -173,6 +191,16 @@ RSpec.describe "Api::V1::Types", type: :request do
       end
 
       it { expect(response).to have_http_status(:not_found)}
+    end
+
+    context 'not logged in as admin' do
+      before do
+        delete "/api/v1/types/delete/#{type.id}"
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 end

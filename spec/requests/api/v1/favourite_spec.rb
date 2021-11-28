@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Favourites", type: :request do
   describe "/GET #index" do
     let(:user) { create(:user) }
+    let(:product) { create(:product) } 
     before do
-      create(:favourite, user: user)
-      create(:favourite, user: user)
+      create(:favourite, user: user, product: product)
+      create(:favourite, user: user, product: product)
     end
 
     context 'logged in as user'
@@ -93,19 +94,31 @@ RSpec.describe "Api::V1::Favourites", type: :request do
 
     end
 
+    context 'not logged in as user' do
+      before do
+        post "/api/v1/favourites/create", params: { favourite: params }
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
+    end
+
   end
 
   describe "/UPDATE #update" do
     let(:user) { create(:user) }
     let(:user2) { create(:user, email: "test2@test.com")}
-    let(:favourite) { create(:favourite, user: user) }
-    let(:favourite2) { create(:favourite, user: user2)}
-    let(:product) { create(:product) }
+    let(:type) { create(:type) }
+    let(:product) { create(:product, type: type) }  
+    let(:favourite) { create(:favourite, user: user, product: product) }
+    let(:favourite2) { create(:favourite, user: user2, product: product) }
+    let(:product2) { create(:product, name: "test2", type: type) }
 
     let(:params) do 
       {
         user_id: user.id,
-        product_id: product.id
+        product_id: product2.id
       }
     end
 
@@ -121,7 +134,7 @@ RSpec.describe "Api::V1::Favourites", type: :request do
 
       it 'updates the favourite' do
         updated_favourite = Favourite.find_by(id: favourite.id)
-        expect(updated_favourite.product_id).to eq(product.id)
+        expect(updated_favourite.product_id).to eq(product2.id)
         expect(updated_favourite.user_id).to eq(user.id)
       end
     end
@@ -157,7 +170,16 @@ RSpec.describe "Api::V1::Favourites", type: :request do
         expect(updated_favourite.user_id).not_to be_nil
         expect(updated_favourite.product_id).not_to be_nil
       end
+    end
 
+    context 'not logged in as user' do
+      before do
+        patch "/api/v1/favourites/update/#{favourite.id}", params: { favourite: params }
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 
@@ -202,6 +224,16 @@ RSpec.describe "Api::V1::Favourites", type: :request do
       end
 
       it { expect(response).to have_http_status(:not_found)}
+    end
+
+    context 'not logged in as user' do
+      before do
+        delete "/api/v1/favourites/delete/#{favourite.id}"
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
     end
   end
 end

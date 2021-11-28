@@ -12,6 +12,14 @@ RSpec.describe Product, type: :model do
       it { expect(build(:product, name: nil)).not_to be_valid }
     end
 
+    context 'when 2 products have the same name' do
+      before do
+        create(:product)
+      end
+      
+      it { expect(build(:product)).not_to be_valid }
+    end
+
     context 'when product does not have a price' do
       it { expect(build(:product, price: nil)).not_to be_valid }
     end

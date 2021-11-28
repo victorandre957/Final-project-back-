@@ -72,6 +72,16 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
+
+    context 'not logged in as user' do
+      before do
+        get '/user/logout'
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
+    end
   end
 
   describe "/POST #create" do
@@ -127,37 +137,81 @@ RSpec.describe "Users", type: :request do
   
   describe "/PATCH #update" do
 
-    let(:user) do
-      create(:user)
-    end
+    let(:user) { create(:user) }
+    let(:user2) { create(:user, email: "test2@test") }
 
     let(:params) do 
       {
-        name: "testUpdate"
+        name: "testUpdate",
+        email: "test@update",
+        password: "updated"
       }
     end
 
-    context 'logged in as user' do
+    context 'logged in as user with valid params' do
       before do
-        patch "/user/update/#{user.id}", params: params, headers: {
+        patch "/user/update/#{user.id}", params: { user: params }, headers: {
           'X-User-Token': user.authentication_token,
           'X-User-Email': user.email
         }
       end
 
-      # it 'returns a success response' do
-      #   expect(response).to have_http_status(:ok)
-      # end
+      it 'returns a success response' do
+        expect(response).to have_http_status(:ok)
+      end
       
-      # it 'updates the user' do
-      #   updated_user = User.find_by(id: user.id)
-      #   expect(updated_user).not_to be_nil
-      #   expect(updated_user.name).to eq("testUpdate")
-      # end
-
+      it 'updates the user' do
+        updated_user = User.find_by(id: user.id)
+        expect(updated_user).not_to be_nil
+        expect(updated_user.name).to eq("testUpdate")
+      end
     end
 
+    context 'logged in as user with invalid params' do
+      before do
+        patch "/user/update/#{user.id}", params: {
+          name: nil
+        }, headers: {
+          'X-User-Token': user.authentication_token,
+          'X-User-Email': user.email
+        }
+      end
 
+      it 'returns a failure response' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+      
+      it 'does not update the user' do
+        updated_user = User.find_by(id: user.id)
+        expect(updated_user).not_to be_nil
+        expect(updated_user.name).not_to eq("testUpdate")
+      end
+    end
+
+    context 'logged in as user trying to update another user' do
+      before do
+        patch "/user/update/#{user2.id}", params: params, headers: {
+          'X-User-Token': user.authentication_token,
+          'X-User-Email': user.email
+        }
+      end
+
+      it 'returns a unauthorized response' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'not logged in as user' do
+      before do
+        patch "/user/update/#{user.id}", params: params
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
+      end
+    end
+
+    
   end
 
   describe "/DELETE #delete" do
@@ -209,6 +263,16 @@ RSpec.describe "Users", type: :request do
 
       it 'returns a success response' do
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'not logged in as user' do
+      before do
+        delete "/user/delete/#{user.id}"
+      end
+
+      it 'returns a failure response' do
+        expect(response).to redirect_to authentication_failure_path
       end
     end
   end
