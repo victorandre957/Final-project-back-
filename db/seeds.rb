@@ -28,7 +28,7 @@ Product.last.photo.attach(io: File.open('./public/Images/Salada.jpg'), filename:
 Product.create!(name:"Pizza de Calabresa", price: 67.00 , quantity: "8 fatias", description: "Queijo, molho especial, calabresa", type_id: 2)
 Product.last.photo.attach(io: File.open('./public/Images/Calabresa.jpg'), filename: 'Calabresa.jpg')
 Product.create!(name:"Pizza Portuguesa", price: 71.00, quantity: "8 fatias", description: "Queijo, molho especial, ovo fatiado , tomate, rúcula", type_id: 2)
-Product.last.photo.attach(io: File.open('./public/Images/porthuesa.jpg.crdownload'), filename: 'porthuesa.jpg.crdownload')
+Product.last.photo.attach(io: File.open('./public/Images/portuguesa.jpg'), filename: 'portuguesa.jpg')
 Product.create!(name:"Pizza de Frango com Catupiry", price: 80.00, quantity: "8 fatias", description: "Queijo, molho especial, frango catupiry", type_id: 2)
 Product.last.photo.attach(io: File.open('./public/Images/pizza-de-frango-com-catupiry-18845.jpg'), filename: 'pizza-de-frango-com-catupiry-18845.jpg')
 
@@ -55,6 +55,7 @@ Product.last.photo.attach(io: File.open('./public/Images/Caro.jpg'), filename: '
 
 #Users
 User.create!(name: "Lucas", email: "lucas@gmail.com", password: "lucas123")
+User.last.profile_picture.attach(io: File.open('./public/Images/Lucas_profile_picture.png'), filename:'Lucas_profile_picture.png')
 User.create!(name: "Matheus", email: "matheus@gmail.com", password: "matheus123")
 User.create!(name: "Victor", email: "victor@gmail.com", password: "victor123")
 
