@@ -8,7 +8,7 @@ class Api::V1::ProductController < ApplicationController
 
   def show
     product = Product.find(params[:id])
-    render json: product, status: :found
+    render json: product, status: :ok
   rescue StandardError
     head(:not_found)
   end

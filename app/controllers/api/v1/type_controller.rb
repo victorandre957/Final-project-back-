@@ -8,7 +8,7 @@ class Api::V1::TypeController < ApplicationController
 
   def show
     type = Type.find(params[:id])
-    render json: type, status: :found
+    render json: type, status: :ok
   rescue StandardError
     head(:not_found)
   end

@@ -29,7 +29,7 @@ RSpec.describe "Api::V1::Products", type: :request do
         get "/api/v1/products/show/#{product.id}"
       end
 
-      it { expect(response).to have_http_status(:found) }
+      it { expect(response).to have_http_status(:ok) }
 
       it 'returns with json' do
         expect(response.content_type).to eq('application/json; charset=utf-8')

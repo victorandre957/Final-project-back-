@@ -28,7 +28,7 @@ RSpec.describe "Api::V1::Types", type: :request do
         get "/api/v1/types/show/#{type.id}"
       end
 
-      it { expect(response).to have_http_status(:found) }
+      it { expect(response).to have_http_status(:ok) }
 
       it 'returns with json' do
         expect(response.content_type).to eq('application/json; charset=utf-8')
