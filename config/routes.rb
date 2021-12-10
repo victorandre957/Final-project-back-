@@ -37,7 +37,7 @@ Rails.application.routes.draw do
       end
       scope 'favourites' do
         get '/', to: 'favourite#index'
-        get 'show/:id', to: 'favourite#show'
+        get ':id', to: 'favourite#is_favourite'
         post 'create', to: 'favourite#create'
         patch 'update/:id', to: 'favourite#update'
         delete 'delete/:id', to: 'favourite#delete'

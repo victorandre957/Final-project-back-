@@ -44,6 +44,14 @@ class Api::V1::FavouriteController < ApplicationController
     render json: {message: e.message}, status: :not_found
   end
 
+  def is_favourite
+      if Favourite.find_by(user_id: current_user.id, product_id: params[:id])
+        render json: true, status: :ok
+      else
+        render json: false, status: :ok
+      end
+    end
+
   private
 
   def favourites_params
