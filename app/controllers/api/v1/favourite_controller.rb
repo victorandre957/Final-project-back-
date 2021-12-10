@@ -56,7 +56,6 @@ class Api::V1::FavouriteController < ApplicationController
 
   def favourites_params
     params.require(:favourite).permit(
-      :name,
       :user_id,
       :product_id
     )
