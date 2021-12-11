@@ -190,7 +190,7 @@ RSpec.describe "Api::V1::Favourites", type: :request do
     let(:favourite2) { create(:favourite, user: user2) }
     context 'logged in as user when favourite exist' do
       before do
-        delete "/api/v1/favourites/delete/#{favourite.id}", headers: {
+        delete "/api/v1/favourites/delete/#{favourite.product.id}", headers: {
           'X-User-Token': user.authentication_token,
           'X-User-Email': user.email
         }
@@ -204,16 +204,6 @@ RSpec.describe "Api::V1::Favourites", type: :request do
       end
     end
 
-    context "logged in as user trying to delete another user's favourite" do
-      before do
-        delete "/api/v1/favourites/delete/#{favourite2.id}", headers: {
-          'X-User-Token': user.authentication_token,
-          'X-User-Email': user.email
-        }
-      end
-
-      it { expect(response).to have_http_status(:unauthorized) }
-    end
 
     context 'logged in as user when favourite does not exist' do
       before do

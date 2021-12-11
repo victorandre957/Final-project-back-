@@ -33,13 +33,9 @@ class Api::V1::FavouriteController < ApplicationController
   end
 
   def delete
-    favourite = Favourite.find(params[:id])
-    if current_user.id === favourite.user_id then 
+    favourite = Favourite.find_by(user_id: current_user.id, product_id: params[:id])
       favourite.destroy!
       render json: favourite, status: :ok
-    else
-      render json: { message: "Você não pode deletar o favorito de outro usuário" }, status: :unauthorized
-    end
   rescue StandardError => e
     render json: {message: e.message}, status: :not_found
   end
