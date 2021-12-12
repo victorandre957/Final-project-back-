@@ -11,11 +11,11 @@ Admin.create(email:"boss@final",password:"senhaimbativel")
 
 ###Menu
 #Types
-Type.create!(name:"entrada")
-Type.create!(name:"pizza")
-Type.create!(name:"lasanha")
-Type.create!(name:"macarrao")
-Type.create!(name:"bebida")
+Type.create!(name:"Entradas")
+Type.create!(name:"Pizzas")
+Type.create!(name:"Lasanhas")
+Type.create!(name:"Macarrões")
+Type.create!(name:"Bebidas")
 
 #Products
 Product.create!(name:"Tábua de Queijos", price: 69.00, quantity: "Porção para 2 pessoas.", description: "Queijos Frescos: Minas Frescal, Ricota, Cream Cheese. Queijos Firmes: Grana Padano, parmesão, Queijos Azuis: Stilton, gorgonzola, roquefort.", type_id: 1)
