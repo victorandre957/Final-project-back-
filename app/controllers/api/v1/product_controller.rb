@@ -37,6 +37,19 @@ class Api::V1::ProductController < ApplicationController
     render json: {message: e.message}, status: :not_found
   end
 
+  def add_image
+    product = Product.find(params[:id])
+    if product.photo.attached?
+      product.photo.purge
+    end
+    params[:image].each do |photo|
+      product.photo.attach(photo)
+    end
+    render json: product, status: :ok
+  rescue StandardError => e
+    render json: {message: e.message }, status: :bad_request
+  end
+
 
   private
 

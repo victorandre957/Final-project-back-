@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post 'create', to: 'user#create'
     patch 'update/:id', to: 'user#update'
     delete 'delete/:id', to: 'user#delete'
+    post 'add_image/:id', to: 'user#add_image'
   end
   scope 'admin' do
     get 'login', to: 'admin#login'
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
         post 'create', to: 'product#create'
         patch 'update/:id', to: 'product#update'
         delete 'delete/:id', to: 'product#delete'
+        post 'add_image/:id', to: 'product#add_image'
       end
       scope 'favourites' do
         get '/', to: 'favourite#index'

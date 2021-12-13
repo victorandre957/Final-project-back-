@@ -54,6 +54,19 @@ class UserController < ApplicationController
     render json: {message: e.message}, status: :not_found
   end
 
+  def add_image
+    user = User.find(params[:id])
+    if user.profile_picture.attached?
+      user.profile_picture.purge
+    end
+    params[:image].each do |image|
+      user.profile_picture.attach(image)
+    end
+    render json: user, status: :ok
+  rescue StandardError => e
+    render json: {message: e.message }, status: :bad_request
+  end
+
 
   private
 

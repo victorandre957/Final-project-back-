@@ -58,6 +58,7 @@ User.create!(name: "Lucas", email: "lucas@gmail.com", password: "lucas123")
 User.last.profile_picture.attach(io: File.open('./public/Images/Lucas_profile_picture.png'), filename:'Lucas_profile_picture.png')
 User.create!(name: "Matheus", email: "matheus@gmail.com", password: "matheus123")
 User.create!(name: "Victor", email: "victor@gmail.com", password: "victor123")
+User.create!(name: "Admin", email:"boss@final", password:"senhaimbativel")
 
 #Favourites
 Favourite.create!(user_id:1, product: Product.last)
